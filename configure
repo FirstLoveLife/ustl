@@ -170,17 +170,17 @@ if [ "$CC" = "gcc" -o "$CC" = "clang" ]; then
 	    sub "s/-Wshadow //"
 	fi
 	if [ $CCVER -ge 500 ]; then
-	    sub "s/@TGT_OPTS@/-std=c++14/"
+	    sub "s/@TGT_OPTS@/-std=c++17/"
 	elif [ $CCVER -ge 460 ]; then
-	    sub "s/@TGT_OPTS@/-std=c++11/"
+	    sub "s/@TGT_OPTS@/-std=c++17/"
 	else
 	    sub "s/@TGT_OPTS@//"
 	fi
     else # clang
 	if [ $CCVER -ge 360 ]; then
-	    sub "s/@TGT_OPTS@/-std=c++14/"
+	    sub "s/@TGT_OPTS@/-std=c++17/"
 	elif [ $CCVER -ge 320 ]; then
-	    sub "s/@TGT_OPTS@/-std=c++11/"
+	    sub "s/@TGT_OPTS@/-std=c++17/"
 	else
 	    sub "s/@TGT_OPTS@//"
 	fi

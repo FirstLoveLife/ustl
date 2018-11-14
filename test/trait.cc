@@ -119,6 +119,8 @@ static void TestTypeTraits (void)
     PRT (is_function<int>);
     PRT (is_function<void (*)(int)>);
     PRT (is_function<decltype(Print)>);
+    PRT (is_function<void() noexcept>);
+    PRT (is_function<void() const && noexcept>);
     PRT (is_function<void (TTA::*)(void)>);
 
     //----------------------------------------------------------------------

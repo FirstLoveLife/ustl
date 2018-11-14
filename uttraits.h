@@ -217,30 +217,33 @@ UNARY_TRAIT_DEFB (is_class,	__is_class(T));
 UNARY_TRAIT_DEFB (is_enum,	__is_enum(T));
 
 UNARY_TRAIT_DEFN (is_function);
-template <typename R, typename... Args> struct is_function<R(Args...)> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...) &> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...) &&> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...,...)> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...,...) &> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...,...) &&> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...) const> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...) const &> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...) const &&> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...,...) const> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...,...) const &> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...,...) const &&> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...) volatile> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...) volatile &> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...) volatile &&> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...,...) volatile> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...,...) volatile &> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...,...) volatile &&> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...) const volatile> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...) const volatile &> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...) const volatile &&> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...,...) const volatile> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...,...) const volatile &> : public true_type { };
-template <typename R, typename... Args> struct is_function<R(Args...,...) const volatile &&> : public true_type { };
+#define ImplIsFun(QUALIFIERS) \
+	template<typename R, typename... Args> \
+	struct is_function<R(Args...) QUALIFIERS> : public true_type \
+	{}; \
+	template<typename R, typename... Args> \
+	struct is_function<R(Args... COMMA...) QUALIFIERS> : public true_type \
+	{};
+
+	// clang-format off
+	ImplIsFun()
+	ImplIsFun(const)
+	ImplIsFun(&)
+	ImplIsFun(&&)
+	ImplIsFun(volatile)
+	ImplIsFun(noexcept)
+	ImplIsFun(const volatile)
+	ImplIsFun(const &)
+	ImplIsFun(const &&)
+	ImplIsFun(const noexcept)
+	ImplIsFun(volatile &)
+	ImplIsFun(volatile &&)
+	ImplIsFun(volatile noexcept)
+	ImplIsFun(const volatile &)
+	ImplIsFun(const & noexcept)
+	ImplIsFun(const && noexcept )
+	ImplIsFun(const volatile &&)
+	ImplIsFun(const volatile noexcept)
 
 UNARY_TRAIT_DEFB (is_object, !is_reference<T>::value && !is_void<T>::value && !is_function<T>::value);
 UNARY_TRAIT_DEFB (__is_referenceable, is_reference<T>::value || is_object<T>::value);
